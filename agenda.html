@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="agenda.css">
+    <style>
+        /* Style pour les tâches cochées */
+        ul li.checked {
+            font-size: large;
+            color: #000000;
+            background-color: lightgreen;
+            /* Fond vert pour les tâches cochées */
+        }
+
+        /* Style pour la croix */
+        .close {
+            cursor: pointer;
+            float: right;
+            font-size: 24px;
+            margin-left: 10px;
+            color: #000000;
+            
+        }
+    </style>
+</head>
+
+<body>
+
+   
+
+    <!-- Contenu principal -->
+    <div class="main-content">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body fond">
+                            <h1 class="card-title text-center mb-4">Planifia</h1>
+                            <!-- Formulaire pour ajouter une tâche -->
+                            <div class="input-group mb-3">
+                                <input type="text" id="inputbox" class="form-control"
+                                    placeholder="Ajouter une nouvelle tâche">
+                                <input type="date" id="datebox">
+                                <button class="btn btn-secondary" onclick="ajouterTache()">Ajouter</button>
+                            </div>
+                            <div class="select">
+                                <select name="taches" class="filtrer-tache">
+                                    <option value="toutes">Toutes les tâches</option>
+                                    <option value="completer">Tâches terminées</option>
+                                    <option value="en-cours">Tâches en cours</option>
+                                </select>
+                            </div>
+                            <!-- Liste des tâches -->
+                            <ul id="listcontainer" class="list-group">
+                                <!-- Les tâches sauvegardées seront ajoutées ici -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputbox = document.getElementById('inputbox');
+        const datebox = document.getElementById('datebox');
+        const listcontainer = document.getElementById('listcontainer');
+        const filtrer = document.querySelector(".filtrer-tache");
+
+
+        filtrer.addEventListener("input", filtrerTache);
+
+        // Fonction pour ajouter une tâche
+        function ajouterTache() {
+            // Vérifier si le champ est vide
+            if (inputbox.value === "") {
+                alert('Veuillez remplir ce champ');
+            } else {
+                var li = document.createElement('li');
+                li.textContent = inputbox.value+ ' - ' + datebox.value; 
+                li.className = 'list-group-item';
+                listcontainer.appendChild(li);
+
+                // Ajouter un bouton pour supprimer la tâche
+                var span = document.createElement('span');
+                span.textContent = '\u00d7';
+                span.className = 'close';
+                li.appendChild(span);
+
+                listcontainer.appendChild(li);
+
+                // Sauvegarder la tâche
+                sauvegarder();
+
+                // Ajouter un événement pour supprimer la tâche
+                span.addEventListener("click", function () {
+                    li.remove();
+                    sauvegarder();
+                });
+
+                // Ajouter un événement pour marquer la tâche comme complétée
+                li.addEventListener("click", function () {
+                    li.classList.toggle("checked");
+                    sauvegarder();
+                });
+            }
+            // Effacer le champ de saisie après avoir ajouté la tâche
+            inputbox.value = "";
+            datebox.value = "";
+        }
+
+
+
+        //Fonction pour filtrer
+        function filtrerTache(e) {
+            const taches = listcontainer.childNodes;
+            taches.forEach(function (li) {
+                if (li && li.nodeType === 1) { 
+                    switch (e.target.value) {
+                        case "toutes":
+                            li.style.display = "flex";
+                            break;
+                        case "completer":
+                            if (li.classList.contains("checked")) {
+                                li.style.display = "flex";
+                            } else {
+                                li.style.display = "none";
+                            }
+                            break;
+                        case "en-cours":
+                            if (!li.classList.contains("checked")) {
+                                li.style.display = "flex";
+                            } else {
+                                li.style.display = "none";
+                            }
+                            break;
+                    }
+                }
+            });
+        }
+
+
+
+
+        // Fonction pour sauvegarder les tâches dans le stockage local
+        function sauvegarder() {
+            localStorage.setItem("taches", listcontainer.innerHTML);
+        }
+
+
+        // Fonction pour récupérer et afficher les tâches sauvegardées
+        function afficherTaches() {
+            // Vider le contenu actuel de listcontainer
+            listcontainer.innerHTML = "";
+
+            if (localStorage.getItem("taches")) {
+                // Récupérer les tâches sauvegardées depuis le stockage local
+                var savedTasks = localStorage.getItem("taches");
+
+                // Ajouter chaque tâche sauvegardée à listcontainer
+                listcontainer.innerHTML = savedTasks;
+
+                // Ajouter des événements aux tâches
+                var items = listcontainer.getElementsByTagName("li");
+                for (var i = 0; i < items.length; i++) {
+                    items[i].addEventListener("click", function () {
+                        this.classList.toggle("checked");
+                        sauvegarder();
+                    });
+                }
+
+                // Ajouter des événements pour la suppression des tâches
+                var closeButtons = listcontainer.querySelectorAll(".close");
+                closeButtons.forEach(function (closeBtn) {
+                    closeBtn.addEventListener("click", function () {
+                        this.parentElement.remove();
+                        sauvegarder();
+                    });
+                });
+            }
+        }
+        afficherTaches();
+    </script>
+
+</body>
+
+</html>

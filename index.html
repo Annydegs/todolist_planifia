@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App to-do list</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+
+
+    body {
+      height: 100vh;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      background-image: url('bg.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    .bg{
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      border-radius: 20px;
+      position: relative;
+  ; 
+    }
+    
+    p{
+      color: white;
+
+    }
+
+    .bg h1 {
+      font-size: 50px;
+      color: white;
+      padding: 40px;
+      border-radius: 10px;
+      font-family: sans-serif;
+    }
+
+    .btn{
+      text-align: center;
+    }
+    .btn:hover{
+background: yellow;
+color: black;
+    }
+
+  
+
+  </style>
+
+</head>
+
+<body>
+  <div class="bg">
+    <h1>Bienvenue sur <span style="color: yellow;"><strong>Planifia</strong></span> </h1>
+    <marquee behavior="right" direction="left" id="défiler" scrollamount="15"><em><p style="font-size: 20px;"> Votre compagnon pour une gestion efficace du temps</p></em></marquee>
+    <br>
+    <a href="agenda.html"><button class="btn btn-secondary mb-3"><strong>Commencer</strong></button></a>
+  </div>
+
+  <script>
+// L'élément marquee
+var marquee = document.getElementById('défiler');
+
+// Démarrage du défilement
+marquee.start();
+
+setTimeout(function() {
+    marquee.stop();
+}, 3000); //(3 secondes)
+
+
+  </script>
+</body>
+</html>
